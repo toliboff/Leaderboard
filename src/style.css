@@ -1,3 +1,15 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body {
-  color: purple;
+  color: rgb(74, 74, 75);
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 5%;
 }
