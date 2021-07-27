@@ -100,13 +100,23 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, style) {\
 
 /***/ }),
 
+/***/ "./src/api.js":
+/*!********************!*\
+  !*** ./src/api.js ***!
+  \********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"createGame\": () => (/* binding */ createGame),\n/* harmony export */   \"addScore\": () => (/* binding */ addScore),\n/* harmony export */   \"getScore\": () => (/* binding */ getScore)\n/* harmony export */ });\nconst baseURL = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/';\n\nconst createGame = async (gameName) => {\n  const response = await fetch(`${baseURL}games/`, {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n    },\n    body: JSON.stringify(gameName),\n  });\n\n  const gameId = await response.json();\n  return gameId;\n};\n\nconst addScore = async (player, gameId) => {\n  const response = await fetch(`${baseURL}games/${gameId}/scores/`, {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n    },\n    body: JSON.stringify(player),\n  });\n\n  const result = await response.json();\n  return result;\n};\n\nconst getScore = async (gameId) => {\n  const response = await fetch(`${baseURL}games/${gameId}/scores/`);\n  const result = await response.json();\n  return result;\n};\n\n\n//# sourceURL=webpack://leaderboard/./src/api.js?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _layout_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layout.js */ \"./src/layout.js\");\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n\n\n\nconst main = document.querySelector('#main');\nmain.innerHTML = (0,_layout_js__WEBPACK_IMPORTED_MODULE_0__.buildLayout)();\n\n//# sourceURL=webpack://leaderboard/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./api.js */ \"./src/api.js\");\n/* harmony import */ var _layout_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./layout.js */ \"./src/layout.js\");\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n\n\n\n\nconst main = document.querySelector('#main');\nmain.innerHTML = (0,_layout_js__WEBPACK_IMPORTED_MODULE_1__.buildLayout)();\nconst form = document.querySelector('#form');\nconst scoreList = document.querySelector('#score-list');\nconst refreshButton = document.querySelector('#refreshBtn');\n\nwindow.addEventListener('DOMContentLoaded', async () => {\n  const game = { name: 'My cool new game' };\n  const { result } = await (0,_api_js__WEBPACK_IMPORTED_MODULE_0__.createGame)(game);\n  const gameId = result.split(' ')[3];\n\n  form.addEventListener('submit', async (event) => {\n    event.preventDefault();\n    const [user, score] = form.children;\n    const player = { user: user.value, score: score.value };\n    await (0,_api_js__WEBPACK_IMPORTED_MODULE_0__.addScore)(player, gameId);\n    user.value = '';\n    score.value = '';\n    user.focus();\n  });\n\n  refreshButton.addEventListener('click', async () => {\n    const result = await (0,_api_js__WEBPACK_IMPORTED_MODULE_0__.getScore)(gameId);\n    scoreList.innerHTML = (0,_layout_js__WEBPACK_IMPORTED_MODULE_1__.showScores)(result.result);\n  });\n});\n\n\n//# sourceURL=webpack://leaderboard/./src/index.js?");
 
 /***/ }),
 
@@ -116,7 +126,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _lay
   \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"buildLayout\": () => (/* binding */ buildLayout),\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst buildLayout = () => `\n<section class=\"scores\">\n      <div class=\"title\">\n        <h2>Recent scores</h2>\n        <button id=\"refreshBtn\" type=\"button\">Refresh</button>\n      </div>\n\n      <ul class=\"score-list\">\n        <li>Name: 100</li>\n        <li>Name: 20</li>\n        <li>Name: 50</li>\n      </ul>\n    </section>\n\n    <section class=\"add-score\">\n      <h2>Add your score</h2>\n\n      <form action=\"#\">\n        <input type=\"text\" id=\"name\" placeholder=\"Your name\" autocomplete=\"off\">\n        <input type=\"text\" id=\"score\" placeholder=\"Your score\" autocomplete=\"off\">\n        <button type=\"submit\" id=\"submitBtn\">Submit</button>\n      </form>\n    </section>\n`;\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (buildLayout);\n\n//# sourceURL=webpack://leaderboard/./src/layout.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"buildLayout\": () => (/* binding */ buildLayout),\n/* harmony export */   \"showScores\": () => (/* binding */ showScores)\n/* harmony export */ });\nconst buildLayout = () => `\n<section class=\"scores\">\n      <div class=\"title\">\n        <h2>Recent scores</h2>\n        <button id=\"refreshBtn\" type=\"button\">Refresh</button>\n      </div>\n\n      <ul class=\"score-list\" id=\"score-list\">\n      </ul>\n    </section>\n\n    <section class=\"add-score\">\n      <h2>Add your score</h2>\n\n      <form action=\"#\" id=\"form\">\n        <input type=\"text\" id=\"name\" placeholder=\"Your name\" autocomplete=\"off\" required>\n        <input type=\"number\" id=\"score\" placeholder=\"Your score\" autocomplete=\"off\" min=\"0\" required>\n        <button type=\"submit\" id=\"submitBtn\">Submit</button>\n      </form>\n    </section>\n`;\n\nconst showScores = (scores) => scores.map((score) => `<li>${score.user}: ${score.score}</li>`).join('');\n\n\n//# sourceURL=webpack://leaderboard/./src/layout.js?");
 
 /***/ })
 
