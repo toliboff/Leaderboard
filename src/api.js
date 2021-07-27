@@ -18,6 +18,20 @@ export const createGame = async (gameName) => {
   return gameId;
 };
 
-export const getScore = async () => {
+export const addScore = async (player, gameId) => {
+  const response = await fetch(`${baseURL}games/${gameId}/scores/`, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(player),
+  });
 
-}
+  const result = await response.json();
+  return result;
+};
