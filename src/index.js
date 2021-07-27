@@ -1,10 +1,11 @@
 import { getScore, createGame, addScore } from './api.js';
-import { buildLayout } from './layout.js';
+import { buildLayout, showScores } from './layout.js';
 import './style.css';
 
 const main = document.querySelector('#main');
 main.innerHTML = buildLayout();
 const form = document.querySelector('#form');
+const scoreList = document.querySelector('#score-list');
 const refreshButton = document.querySelector('#refreshBtn');
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -17,19 +18,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     const [user, score] = form.children;
     const player = { user: user.value, score: score.value };
     await addScore(player, gameId);
-
-    // const result = await addScore(player, gameId);
-    // console.log(result);
+    user.value = '';
+    score.value = '';
+    user.focus();
   });
 
   refreshButton.addEventListener('click', async () => {
     const result = await getScore(gameId);
-    console.log(result);
+    scoreList.innerHTML = showScores(result.result);
   });
 });
-
-
-// const gg = async () => {
-//   const t = await createGame()
-//   console.log(t);
-// };

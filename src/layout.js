@@ -5,22 +5,19 @@ export const buildLayout = () => `
         <button id="refreshBtn" type="button">Refresh</button>
       </div>
 
-      <ul class="score-list">
-        <li>Name: 100</li>
-        <li>Name: 20</li>
-        <li>Name: 50</li>
+      <ul class="score-list" id="score-list">
       </ul>
     </section>
 
     <section class="add-score">
       <h2>Add your score</h2>
 
-      <form action="#">
-        <input type="text" id="name" placeholder="Your name" autocomplete="off">
-        <input type="text" id="score" placeholder="Your score" autocomplete="off">
+      <form action="#" id="form">
+        <input type="text" id="name" placeholder="Your name" autocomplete="off" required>
+        <input type="number" id="score" placeholder="Your score" autocomplete="off" min="0" required>
         <button type="submit" id="submitBtn">Submit</button>
       </form>
     </section>
 `;
 
-export default buildLayout;
+export const showScores = (scores) => scores.map((score) => `<li>${score.user}: ${score.score}</li>`).join('');
